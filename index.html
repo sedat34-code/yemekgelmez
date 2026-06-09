@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YemekGelmez | Sahte Sipariş, Gerçek Tasarruf</title>
+  <meta name="description" content="Canın yemek mi çekiyor? YemekGelmez ile sahte sipariş ver, kuryeyi takip et, paran ve kalorin cebinde kalsın!">
+  
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons (for clean interface icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d0e15">
+</head>
+<body>
+  
+  <div id="phone-container">
+    <!-- Status Bar (simulated for premium mobile web feel) -->
+    <header class="phone-status-bar">
+      <span class="status-time">20:06</span>
+      <div class="status-icons">
+        <i class="fa-solid fa-signal"></i>
+        <i class="fa-solid fa-wifi"></i>
+        <i class="fa-solid fa-battery-three-quarters"></i>
+      </div>
+    </header>
+
+    <!-- Main App Wrapper -->
+    <main id="app">
+      
+      <!-- 1. SPLASH / WELCOME SCREEN -->
+      <section id="screen-splash" class="app-screen active">
+        <div class="splash-logo">
+          <div class="logo-circle">
+            <i class="fa-solid fa-motorcycle logo-icon"></i>
+            <div class="logo-ban"><i class="fa-solid fa-ban"></i></div>
+          </div>
+          <h1>Yemek<span>Gelmez</span></h1>
+          <p class="tagline">Sipariş Hazır, Kurye Yolda... Ama Yemek Gelmez!</p>
+        </div>
+
+        <div class="splash-stats">
+          <h3>Tüm Türkiye'de Bugün Tasarruf Edilen:</h3>
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="stat-val" id="global-money-saved">₺142.850</span>
+              <span class="stat-lbl">Kurtarılan Para</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-val" id="global-calories-saved">980K kcal</span>
+              <span class="stat-lbl">Alınmayan Kalori</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="splash-info-card">
+          <i class="fa-solid fa-brain info-icon animate-pulse"></i>
+          <div>
+            <h4>Dopamin Simülasyonu Nedir?</h4>
+            <p>Canın yemek sipariş etmek istediğinde sepete ekle, ödemeyi yap ve siparişin heyecanını yaşa. Sipariş tamamlanır ama yemek gelmez, paran ve kalorin güvende kalır!</p>
+          </div>
+        </div>
+
+        <div class="splash-actions">
+          <button id="btn-start-order" class="btn btn-primary btn-lg">
+            <span>Dürtünü Yenmeye Başla</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+          <button id="btn-open-history-welcome" class="btn btn-outline btn-sm">
+            <i class="fa-solid fa-chart-line"></i> Tasarruf Geçmişim
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. HOME SCREEN -->
+      <section id="screen-home" class="app-screen">
+        <header class="app-header">
+          <div class="header-top">
+            <div class="delivery-address" id="btn-edit-address-header" style="cursor: pointer;">
+              <i class="fa-solid fa-location-dot accent-icon"></i>
+              <div class="address-details">
+                <span class="address-title" id="header-address-title">Ev</span>
+                <span class="address-text" id="header-address-text">Caferağa Mah. Moda Cad. No:1923, Kadıköy / İstanbul</span>
+              </div>
+            </div>
+            <button id="btn-header-history" class="btn-icon-circle">
+              <i class="fa-solid fa-chart-pie"></i>
+            </button>
+          </div>
+          <div class="header-search">
+            <div class="search-bar">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-input" placeholder="Esprili restoran veya yemek ara...">
+            </div>
+          </div>
+        </header>
+
+        <!-- Promotion Banner Slider (Mizahi Kampanyalar) -->
+        <div class="promotions-slider">
+          <div class="promo-card">
+            <div class="promo-content">
+              <span class="promo-tag">Fırsat Kampanyası</span>
+              <h2>Bugün Her Şey %100 İndirimli!</h2>
+              <p>Çünkü sipariş ettiğiniz hiçbir şey kapınıza gelmeyecek.</p>
+            </div>
+            <div class="promo-badge">₺0</div>
+          </div>
+        </div>
+
+        <!-- Categories Section -->
+        <section class="section-categories">
+          <h3 class="section-title">Kategoriler</h3>
+          <div class="categories-grid scroll-x">
+            <button class="category-btn active" data-category="all">
+              <span class="cat-emoji">🍔</span>
+              <span class="cat-name">Tümü</span>
+            </button>
+            <button class="category-btn" data-category="kebap">
+              <span class="cat-emoji">🍢</span>
+              <span class="cat-name">Kebap</span>
+            </button>
+            <button class="category-btn" data-category="burger">
+              <span class="cat-emoji">🍔</span>
+              <span class="cat-name">Burger</span>
+            </button>
+            <button class="category-btn" data-category="pizza">
+              <span class="cat-emoji">🍕</span>
+              <span class="cat-name">Pizza</span>
+            </button>
+            <button class="category-btn" data-category="doner">
+              <span class="cat-emoji">🥙</span>
+              <span class="cat-name">Döner</span>
+            </button>
+            <button class="category-btn" data-category="tavuk">
+              <span class="cat-emoji">🍗</span>
+              <span class="cat-name">Çıtır Tavuk</span>
+            </button>
+            <button class="category-btn" data-category="tatli">
+              <span class="cat-emoji">🍰</span>
+              <span class="cat-name">Tatlı</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Restaurants Section -->
+        <section class="section-restaurants">
+          <div class="section-header-row">
+            <h3 class="section-title">Yakındaki Restoranlar</h3>
+            <span class="restaurant-count" id="restaurant-count">6 Restoran Listeleniyor</span>
+          </div>
+          <div class="restaurants-list" id="restaurants-container">
+            <!-- Dynamic restaurants will be injected here -->
+          </div>
+        </section>
+      </section>
+
+      <!-- 3. RESTAURANT DETAIL SCREEN -->
+      <section id="screen-restaurant-detail" class="app-screen">
+        <div class="restaurant-hero">
+          <button id="btn-back-to-home" class="btn-back">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <div class="restaurant-hero-img" id="res-detail-hero-bg"></div>
+          <div class="restaurant-hero-overlay"></div>
+          <div class="restaurant-meta-card">
+            <h2 id="res-detail-name">Restoran Adı</h2>
+            <p id="res-detail-tagline">Restoran sloganı buraya gelecek</p>
+            <div class="res-badges">
+              <span class="res-badge rating"><i class="fa-solid fa-star"></i> <span id="res-detail-rating">4.8</span></span>
+              <span class="res-badge time"><i class="fa-solid fa-motorcycle"></i> <span id="res-detail-time">2-3 sn</span></span>
+              <span class="res-badge min-price"><i class="fa-solid fa-wallet"></i> ₺0 Alt Limit</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="restaurant-menu-section">
+          <h3 class="menu-title">Menü</h3>
+          <div class="menu-list" id="menu-items-container">
+            <!-- Dynamic menu items will be injected here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CHECKOUT SCREEN -->
+      <section id="screen-checkout" class="app-screen">
+        <header class="app-header-simple">
+          <button id="btn-back-to-res" class="btn-back">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <h2>Siparişi Onayla</h2>
+          <div style="width: 40px;"></div> <!-- Spacer -->
+        </header>
+
+        <div class="checkout-scrollable">
+          <!-- Delivery Info Card -->
+          <div class="checkout-card">
+            <div class="card-header-row">
+              <h3><i class="fa-solid fa-map-location-dot"></i> Teslimat Adresi</h3>
+            </div>
+            <div class="address-preview" id="btn-edit-address-checkout" style="cursor: pointer;">
+              <strong id="checkout-address-title">Ev</strong>
+              <p id="checkout-address-text">Caferağa Mah. Moda Cad. No:1923, Kadıköy / İstanbul</p>
+              <span class="checkout-note"><i class="fa-solid fa-clock"></i> Tahmini Teslimat: <strong>Asla Gelmeyecek (0 dk)</strong></span>
+            </div>
+          </div>
+
+          <!-- Payment Card Info -->
+          <div class="checkout-card">
+            <div class="card-header-row">
+              <h3><i class="fa-solid fa-credit-card"></i> Ödeme Yöntemi</h3>
+            </div>
+            <div class="payment-method-selector">
+              <div class="payment-option active">
+                <i class="fa-solid fa-brain option-icon"></i>
+                <div class="option-details">
+                  <strong>Dopamin Sanal Kart</strong>
+                  <span>Bakiyeniz: 🌟 Sınırsız (Kurtarılan İrade)</span>
+                </div>
+                <i class="fa-solid fa-circle-check checked-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Checkout Cart Summary -->
+          <div class="checkout-card">
+            <div class="card-header-row">
+              <h3><i class="fa-solid fa-basket-shopping"></i> Sipariş Özeti</h3>
+            </div>
+            <div class="checkout-items-list" id="checkout-items-container">
+              <!-- Items will be injected here -->
+            </div>
+          </div>
+
+          <!-- Irresistible Stats Info -->
+          <div class="dopamine-saving-preview">
+            <div class="preview-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div class="preview-text">
+              <h4>Bu Siparişi Vermeyerek:</h4>
+              <p>Tam <strong id="checkout-savings-money">₺0</strong> para ve <strong id="checkout-savings-calories">0 kcal</strong> kalori tasarruf edeceksiniz!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-footer">
+          <div class="checkout-total-row">
+            <span>Ödenecek Tutar</span>
+            <div class="total-prices">
+              <span class="old-price" id="checkout-old-total">₺120</span>
+              <span class="new-price">₺0</span>
+            </div>
+          </div>
+          <button id="btn-place-order" class="btn btn-primary btn-block btn-lg">
+            <i class="fa-solid fa-circle-check"></i> <span>Siparişi Onayla ve Kurtul!</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 5. RIDER TRACKING SCREEN -->
+      <section id="screen-rider-tracking" class="app-screen">
+        <!-- Header with Rider Info -->
+        <header class="rider-tracking-header">
+          <div class="rider-info">
+            <div class="rider-avatar">
+              <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <div class="rider-text">
+              <h4 id="rider-name">Kurye Ahmet</h4>
+              <p id="rider-sub">Siparişinizi aldı, yola çıktı!</p>
+            </div>
+          </div>
+          <div class="rider-status-pill">
+            <span class="pulse-dot"></span> <span id="tracking-timer">15 dk</span>
+          </div>
+        </header>
+
+        <!-- Simulated Map Area -->
+        <div class="map-simulation-container">
+          <div class="map-bg-grid"></div>
+          
+          <!-- Route Path SVG -->
+          <svg class="map-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="route-path" d="M 80 85 C 20 85, 20 20, 80 20" stroke="#ff8533" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2"/>
+          </svg>
+          
+          <!-- Restaurant Pin -->
+          <div class="map-pin pin-restaurant" style="top: 85%; left: 80%;">
+            <div class="pin-icon"><i class="fa-solid fa-store"></i></div>
+            <span class="pin-lbl">Mutfak</span>
+          </div>
+
+          <!-- User Home Pin -->
+          <div class="map-pin pin-home" style="top: 20%; left: 80%;">
+            <div class="pin-icon"><i class="fa-solid fa-house-chimney"></i></div>
+            <span class="pin-lbl" id="tracking-address-title">Ev</span>
+          </div>
+
+          <!-- Rider Motorcycle Icon -->
+          <div id="map-rider-bike" style="top: 85%; left: 80%;">
+            <i class="fa-solid fa-motorcycle"></i>
+          </div>
+        </div>
+
+        <!-- Courier Status Stepper -->
+        <div class="tracking-stepper">
+          <div class="step active" id="step-1">
+            <div class="step-circle"><i class="fa-solid fa-receipt"></i></div>
+            <span class="step-name">Sipariş Alındı</span>
+          </div>
+          <div class="step" id="step-2">
+            <div class="step-circle"><i class="fa-solid fa-fire-burner"></i></div>
+            <span class="step-name">Hazırlanıyor</span>
+          </div>
+          <div class="step" id="step-3">
+            <div class="step-circle"><i class="fa-solid fa-motorcycle"></i></div>
+            <span class="step-name">Kurye Yolda</span>
+          </div>
+          <div class="step" id="step-4">
+            <div class="step-circle"><i class="fa-solid fa-circle-xmark"></i></div>
+            <span class="step-name">Sanal Teslim</span>
+          </div>
+        </div>
+
+        <!-- Courier Live Chat (Simulated Chat Panel) -->
+        <div class="rider-chat-section">
+          <div class="chat-header">
+            <span>Kurye Canlı Sohbet</span>
+            <span class="chat-online-badge"><span class="dot"></span> Çevrimiçi</span>
+          </div>
+          <div class="chat-messages" id="chat-messages-container">
+            <!-- Messages will appear here dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. VICTORY / SUCCESS SCREEN -->
+      <section id="screen-victory" class="app-screen">
+        <div class="victory-confetti-canvas" id="confetti-holder"></div>
+        
+        <div class="victory-header animate-scale">
+          <div class="success-checkmark">
+            <i class="fa-solid fa-shield-halved success-shield animate-float"></i>
+          </div>
+          <h2>Büyük İrade Zaferi!</h2>
+          <p>Yemeği sipariş etmeyerek hem mideni hem cüzdanını kurtardın.</p>
+        </div>
+
+        <!-- Savings Ledger Card -->
+        <div class="victory-card ledger-card">
+          <h3>Sipariş Tasarruf Raporu</h3>
+          <div class="ledger-grid">
+            <div class="ledger-item">
+              <span class="ledger-lbl">Kurtarılan Para</span>
+              <span class="ledger-val text-green" id="vic-money-saved">₺280,00</span>
+              <span class="ledger-sub">Cebinde kalan net nakit</span>
+            </div>
+            <div class="ledger-item">
+              <span class="ledger-lbl">Alınmayan Kalori</span>
+              <span class="ledger-val text-orange" id="vic-calories-saved">1.450 kcal</span>
+              <span class="ledger-sub">Vücuduna almadığın fazla yük</span>
+            </div>
+            <div class="ledger-item">
+              <span class="ledger-lbl">Kazanılan Zaman</span>
+              <span class="ledger-val text-blue" id="vic-time-saved">45 dk</span>
+              <span class="ledger-sub">Bekleme ve yeme süresi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wise Message Card -->
+        <div class="victory-wisdom-card">
+          <i class="fa-solid fa-quote-left quotes-icon"></i>
+          <p id="victory-quote">"Bugünkü can çekmesi, yarının gurur kaynağıdır. Gerçek dopamin, harcayarak değil iradene sahip çıkarak kazanılır."</p>
+          <div class="water-tip">
+            <i class="fa-solid fa-glass-water animate-pulse"></i> <span>Şimdi gidip kocaman bir bardak su içme zamanı!</span>
+          </div>
+        </div>
+
+        <!-- Victory Actions -->
+        <div class="victory-actions">
+          <button id="btn-victory-share" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-share-nodes"></i> Başarını Arkadaşlarınla Paylaş
+          </button>
+          <div class="victory-row-btns">
+            <button id="btn-victory-history" class="btn btn-outline">
+              <i class="fa-solid fa-chart-line"></i> Tasarruf Raporum
+            </button>
+            <button id="btn-victory-home" class="btn btn-neutral">
+              <i class="fa-solid fa-house"></i> Ana Sayfa
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. HISTORY / DASHBOARD SCREEN -->
+      <section id="screen-history" class="app-screen">
+        <header class="app-header-simple">
+          <button id="btn-history-back" class="btn-back">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <h2>Tasarruf Raporum</h2>
+          <button id="btn-history-reset" class="btn-icon-clear" title="İstatistikleri Sıfırla">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </header>
+
+        <div class="history-scrollable">
+          <!-- Total Accumulative Savings Card -->
+          <div class="history-summary-card">
+            <h3>Toplam Birikmiş Tasarrufunuz</h3>
+            <div class="summary-grid">
+              <div class="summary-box">
+                <span class="summary-num text-green" id="total-saved-money">₺0,00</span>
+                <span class="summary-lbl">Kazanılan Para</span>
+              </div>
+              <div class="summary-box">
+                <span class="summary-num text-orange" id="total-saved-calories">0 kcal</span>
+                <span class="summary-lbl">Alınmayan Kalori</span>
+              </div>
+              <div class="summary-box">
+                <span class="summary-num text-blue" id="total-saved-time">0 dk</span>
+                <span class="summary-lbl">Kazanılan Zaman</span>
+              </div>
+            </div>
+            <div class="streak-badge">
+              <i class="fa-solid fa-fire streak-icon animate-pulse"></i>
+              <span>İrade Serisi: <strong id="irade-streak">0 Gün</strong></span>
+            </div>
+          </div>
+
+          <!-- History List Section -->
+          <div class="history-list-section">
+            <h3 class="section-title">Geçmiş İrade Zaferleri</h3>
+            <div class="history-items-list" id="history-items-container">
+              <!-- Empty state fallback -->
+              <div class="empty-history" id="empty-history-view">
+                <i class="fa-solid fa-calendar-xmark empty-icon"></i>
+                <p>Henüz kayıtlı bir irade zaferiniz yok.</p>
+                <span>Hemen sepetini doldurup sahte sipariş vererek ilk tasarrufunu yap!</span>
+              </div>
+              
+              <!-- Dynamic items will be injected here -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Cart Drawer Bar (appears when items are in cart) -->
+    <div id="bottom-cart-bar">
+      <div class="cart-bar-info">
+        <div class="cart-icon-wrapper">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span class="cart-badge-count" id="cart-badge-count">0</span>
+        </div>
+        <div class="cart-bar-prices">
+          <span class="cart-bar-total" id="cart-bar-total">₺0,00</span>
+          <span class="cart-bar-calories" id="cart-bar-calories">0 kcal</span>
+        </div>
+      </div>
+      <button id="btn-open-cart" class="btn btn-accent btn-sm">
+        <span>Sepeti Gör</span> <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- 8. NATIVE CSS CART DRAWER -->
+    <dialog id="cart-dialog" class="cart-drawer-dialog">
+      <div class="drawer-header">
+        <h3>Sepetim</h3>
+        <button id="btn-close-cart" class="btn-close-circle">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="drawer-body">
+        <div class="drawer-items-list" id="drawer-items-container">
+          <!-- Cart items will be loaded here dynamically -->
+        </div>
+
+        <div class="promo-coupon-container">
+          <div class="coupon-input-group">
+            <i class="fa-solid fa-ticket ticket-icon"></i>
+            <input type="text" id="coupon-code-input" placeholder="Kupon kodu (örn: DOPAMIN50)">
+            <button id="btn-apply-coupon" class="btn btn-neutral btn-sm">Uygula</button>
+          </div>
+          <div id="coupon-message" class="coupon-msg"></div>
+        </div>
+
+        <div class="price-breakdown">
+          <div class="price-row">
+            <span>Sepet Toplamı</span>
+            <span id="price-subtotal">₺0,00</span>
+          </div>
+          <div class="price-row">
+            <span>Gönderim Ücreti</span>
+            <span id="price-delivery">₺35,00</span>
+          </div>
+          <div class="price-row">
+            <span>Hizmet Bedeli</span>
+            <span id="price-service">₺15,00</span>
+          </div>
+          <div class="price-row discount-row" id="price-discount-row" style="display: none;">
+            <span>İndirim (Kupon)</span>
+            <span id="price-discount">-₺0,00</span>
+          </div>
+          <div class="price-row total-row">
+            <span>Ödenecek Tutar</span>
+            <span class="final-price" id="price-total">₺50,00</span>
+          </div>
+          <div class="price-row kcal-row">
+            <span>Kurtarılacak Toplam Kalori</span>
+            <span class="final-kcal" id="price-kcal">0 kcal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button id="btn-go-to-checkout" class="btn btn-primary btn-block btn-lg">
+          <span>Ödemeye Geç</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </dialog>
+
+  </div>
+
+  <!-- Share Toast / Alert -->
+  <div id="toast-message" class="toast">
+    <i class="fa-solid fa-circle-check toast-icon"></i>
+    <span id="toast-text">Başarı bilgisi panoya kopyalandı!</span>
+  </div>
+
+  <!-- 9. ADDRESS EDIT DIALOG -->
+  <dialog id="address-dialog" class="address-dialog">
+    <div class="drawer-header">
+      <h3>Adres Bilgileri</h3>
+      <button id="btn-close-address" class="btn-close-circle">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="form-group">
+        <label for="address-title-input">Adres Başlığı (örn: Ev, İş)</label>
+        <input type="text" id="address-title-input" placeholder="Ev">
+      </div>
+      <div class="form-group">
+        <label for="address-text-input">Detaylı Adres</label>
+        <textarea id="address-text-input" rows="3" placeholder="Caferağa Mah. Moda Cad. No:1923, Kadıköy / İstanbul"></textarea>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button id="btn-save-address" class="btn btn-primary btn-block">Adresi Kaydet</button>
+    </div>
+  </dialog>
+
+  <!-- Background Music Hum & Engine sound logic in JS -->
+  
+  <script src="app.js"></script>
+</body>
+</html>

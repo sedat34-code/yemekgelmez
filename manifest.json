@@ -1,0 +1,22 @@
+{
+  "name": "YemekGelmez | Sahte Sipariş, Gerçek Tasarruf",
+  "short_name": "YemekGelmez",
+  "description": "Canın yemek mi çekiyor? YemekGelmez ile sahte sipariş ver, kuryeyi takip et, paran ve kalorin cebinde kalsın!",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0e15",
+  "theme_color": "#0d0e15",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5617/5617269.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5617/5617269.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
