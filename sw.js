@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yemek-gelmez-v1';
+const CACHE_NAME = 'yemek-gelmez-v2';
 const ASSETS = [
   './',
   './index.html',
