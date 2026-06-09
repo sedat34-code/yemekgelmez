@@ -1113,7 +1113,7 @@ function shareVictory() {
   const savedKcal = state.stats.history[0]?.savedCalories || 0;
   const resName = state.stats.history[0]?.restaurantName || "Sanal Sipariş";
   
-  const shareText = `Canım ${resName} yemek istedi ama ben zekice davranıp YemekGelmez.com ile sahte sipariş verdim! 🛵 Cüzdanımda ₺${savedAmt.toFixed(2)} nakit ve vücudumda ${savedKcal} kalori kazancım var. İrade gücü kazandı! 🌟 Sen de sipariş vermemek için dene!`;
+  const shareText = `Canım ${resName} yemek istedi ama ben zekice davranıp https://yemekgelmez.netlify.app/ ile sahte sipariş verdim! 🛵 Cüzdanımda ₺${savedAmt.toFixed(2)} nakit ve vücudumda ${savedKcal} kalori kazancım var. İrade gücü kazandı! 🌟 Sen de sipariş vermemek için dene!`;
   
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
   window.open(twitterUrl, '_blank');
