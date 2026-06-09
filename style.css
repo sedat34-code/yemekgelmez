@@ -2242,6 +2242,161 @@
     from { opacity: 0; transform: scale(0.85); }
     to { opacity: 1; transform: scale(1); }
   }
+
+  /* Splash Screen Support */
+  .splash-support {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .splash-support a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .splash-support a:hover {
+    color: #ffffff;
+    border-color: var(--primary);
+    background: rgba(255, 126, 33, 0.1);
+    box-shadow: 0 0 10px rgba(255, 126, 33, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .splash-support a i {
+    color: var(--primary);
+  }
+
+  /* Victory Support Card */
+  .victory-support-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    width: 100%;
+    text-align: center;
+    margin: 16px 0;
+    z-index: 3;
+    box-shadow: var(--box-shadow-soft);
+  }
+
+  .victory-support-card h4 {
+    font-size: 0.95rem;
+    color: #ffffff;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .victory-support-card p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .support-banner-link {
+    display: block;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .support-banner-link:hover {
+    transform: translateY(-2px) scale(1.01);
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(255, 126, 33, 0.15);
+  }
+
+  .support-banner-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* History Support Card */
+  .history-support-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow-soft);
+    transition: border-color 0.25s ease;
+  }
+
+  .history-support-card:hover {
+    border-color: var(--primary);
+  }
+
+  .support-card-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.25s ease;
+  }
+
+  .support-card-link:hover {
+    background-color: var(--bg-card-hover);
+  }
+
+  .support-card-link i.fa-mug-hot {
+    font-size: 1.4rem;
+    color: var(--primary);
+    background: rgba(255, 126, 33, 0.08);
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .support-card-info {
+    text-align: left;
+  }
+
+  .support-card-info h4 {
+    font-size: 0.85rem;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+
+  .support-card-info p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .support-card-chevron {
+    margin-left: auto;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: transform 0.25s ease, color 0.25s ease;
+  }
+
+  .support-card-link:hover .support-card-chevron {
+    transform: translateX(3px);
+    color: #ffffff;
+  }
 }
 
 @layer utilities {

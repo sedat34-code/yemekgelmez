@@ -4,7 +4,8 @@ const ASSETS = [
   './index.html',
   './style.css',
   './app.js',
-  './manifest.json'
+  './manifest.json',
+  './kreosus.jpg'
 ];
 
 // Install Service Worker and cache assets
