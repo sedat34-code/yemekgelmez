@@ -663,6 +663,7 @@ function loadCheckoutScreen() {
 
 
 // --- 9. RIDER TRACKING SIMULATION ---
+// --- 9. RIDER TRACKING SIMULATION ---
 const ROUTES = [
   "M 80 85 C 20 85, 20 20, 80 20", // Left loop (Classic)
   "M 80 85 C 40 70, 95 50, 80 20", // S-Curve
@@ -672,7 +673,41 @@ const ROUTES = [
 ];
 let lastRouteIndex = -1;
 
+const MESSAGES_POOL = {
+  kitchen: [
+    "[Şef Osman]: Usta köfteleri ızgaraya attım, cızırdıyorlar. Yalnız kokusunu buraya gönderebilseydik iraden hemen kırılırdı, şanslısın! 😉",
+    "[Restoran Mutfak]: Siparişiniz hazırlanıyor. Hamuru o kadar ince açtık ki arkasından cüzdanınızdaki paralar görünüyor (hâlâ yerindeler!).",
+    "[Lahmacuncu Nuri]: Fırın alev alev usta. Lahmacunları fırına attım. Yalnız bu kokuya kurye Ahmet bile dayanamayabilir, benden söylemesi.",
+    "[Burger Ustası]: Sosu o kadar bol döktüm ki cheddar peyniri patateslerle dans ediyor. Kurye yolda dökmeden getirse bari (gerçi gelmeyecek ama olsun!).",
+    "[Tatlı Ustası Süleyman]: Şerbeti tam kıvamında döktüm, Antep fıstıklarını üzerine boca ettim. Yemediğin her saniye için miden sana minnettar!"
+  ],
+  pickup: [
+    "Kurye Ahmet: Paketi kaptım usta! Sıcak tutan çantaya attım, motoru tek marşta çalıştırdım. Jet hızıyla geliyorum!",
+    "Kurye Ahmet: Selam usta, kuryen Ahmet ben. Paketi aldım kucağıma, yalnız tavuklar acayip çıtır duruyor. Yolda bir kaza çıkmaz umarım, gazlıyorum!",
+    "Kurye Ahmet: Sipariş bende usta. Kaskı taktım, aynaları ayarladım. Kadıköy sokakları benden sorulur, uçuşa geçiyorum!",
+    "Kurye Ahmet: Usta paketi teslim aldım. Sıcak çantamın fermuarını çektim. Navigasyonu açtım, rota çizildi. Yoldayım!"
+  ],
+  on_the_way: [
+    "Kurye Ahmet: Abi önümde bir belediye otobüsü var, arkasına rüzgar tüneli yaptım 70'le gidiyorum, yakıt tasarrufu! Cüzdan tasarrufuna tam destek.",
+    "Kurye Ahmet: Trafik kilit usta ama kaldırımlardan kaldırımlara atlıyorum, kurye dediysek boşuna demedik! Sıcak sıcak kapındayım.",
+    "Kurye Ahmet: Abi yolda tatlı bir kedi gördüm, patateslerden bir tane vereyim dedim ama vazgeçtim, iradeni koruyorum! Yola devam.",
+    "Kurye Ahmet: Abi ara sokaklardan yardırıyorum. Önüme çıkan tüm kırmızı ışıkları irademle yeşile çevirdim diyebiliriz, az kaldı!"
+  ],
+  near_arrival: [
+    "Kurye Ahmet: Apartmanın önüne yanaştım abi. Asansörün düğmesine bastım, yukarı çıkıyorum. Yalnız asansörde kokuyu duyan komşu 'Ne sipariş ettin?' dedi, söylemedim gizli bilgi.",
+    "Kurye Ahmet: Abi kapının önündeyim. Yalnız zili çalmadan önce son kez pakete baktım... Double Cheeseburger resmen bana göz kırpıyor, bir ısırık alsam ruhun duymazdı ama neyse usta.",
+    "Kurye Ahmet: Abi kapıya geldim, paspasın üzerine motoru park ettim (şaka şaka kapıdayım). Zile basıyorum.",
+    "Kurye Ahmet: Binanın kapısından girdim usta. Merdivenleri ikişer ikişer çıkıyorum, spor olsun. Kapının önüne kadar geldim."
+  ],
+  climax: [
+    "Kurye Ahmet: Ve kapıyı çalıyorum... ŞAKA YAPTIM! Kardeşim, bu bir dopamin sitesi. Tabii ki yemek falan gelmiyor! Ama tebrikler; can çekmesini, para harcamayı ve o gereksiz kaloriyi yenmiş oldun! Cüzdanındaki nakit yerinde duruyor. 🌟",
+    "Kurye Ahmet: Kapıyı tık tık vuruyorum... Yalnız kapıyı açınca eline sadece boş hava geçecek! Çünkü bu bir dopamin simülasyonu. Yemeği sipariş etmedin ama iradeni taçlandırdın. Helal olsun! 🌟",
+    "Kurye Ahmet: Kapının zilini çalıyorum... DING DONG! Ama o da ne? Karşında kurye yerine boşluk var! Çünkü bu bir irade testidir ve sen bu testi başarıyla geçtin. Miden ve cüzdanın sana teşekkür ediyor! 🌟"
+  ]
+};
+
 let trackingInterval = null;
+let chatTimeout0 = null;
 let chatTimeout1 = null;
 let chatTimeout2 = null;
 
@@ -713,28 +748,38 @@ function startRiderTracking() {
   startEngineSound();
   adjustEnginePitch(45); // Idle hum
   
-  // Sequence Timeline
-  let progress = 0; // 0 to 100
-  let step = 1;
-  
   // Add initial chat messages
   addChatBubble("system", "Siparişinizi başarıyla oluşturuldu! (Ödenen: ₺0,00)");
   
-  chatTimeout1 = setTimeout(() => {
-    addChatBubble("rider", "Selamlar abi, ben Kurye Ahmet. Siparişini restoran mutfağından teslim aldım. Fırından taze sıcak çıktı, hemen paketleyip yola çıkıyorum!");
+  // Select random messages
+  const randKitchen = MESSAGES_POOL.kitchen[Math.floor(Math.random() * MESSAGES_POOL.kitchen.length)];
+  const randPickup = MESSAGES_POOL.pickup[Math.floor(Math.random() * MESSAGES_POOL.pickup.length)];
+  const randOnWay = MESSAGES_POOL.on_the_way[Math.floor(Math.random() * MESSAGES_POOL.on_the_way.length)];
+  const randNear = MESSAGES_POOL.near_arrival[Math.floor(Math.random() * MESSAGES_POOL.near_arrival.length)];
+  
+  // Mutfak Hazırlık Mesajı (t=1.5s)
+  chatTimeout0 = setTimeout(() => {
+    addChatBubble("rider", randKitchen);
     document.getElementById("step-1").className = "step completed";
     document.getElementById("step-2").className = "step active";
-    document.getElementById("rider-sub").textContent = "Paket hazırlanıyor, fırından yeni çıktı.";
+    document.getElementById("rider-sub").textContent = "Sipariş mutfakta hazırlanıyor...";
+  }, 1500);
+  
+  // Kurye Alım Mesajı (t=4.5s)
+  chatTimeout1 = setTimeout(() => {
+    addChatBubble("rider", randPickup);
+    document.getElementById("rider-sub").textContent = "Paket hazırlandı, kurye teslim aldı.";
     adjustEnginePitch(60); // Revving up
-  }, 3000);
+  }, 4500);
 
+  // Yolculuk Simülasyon Başlangıcı (t=7.5s)
   chatTimeout2 = setTimeout(() => {
     addChatBubble("system", "Kurye Ahmet siparişinizi teslim aldı ve yola çıktı!");
     document.getElementById("step-2").className = "step completed";
     document.getElementById("step-3").className = "step active";
     document.getElementById("rider-sub").textContent = "Kurye Ahmet yolda!";
     document.getElementById("tracking-timer").textContent = "5 dk";
-    adjustEnginePitch(90); // High frequency motorcycle engine sound
+    adjustEnginePitch(90); // High frequency engine sound
     
     // Start bike movement simulation
     let movementTimer = 0;
@@ -767,19 +812,19 @@ function startRiderTracking() {
           document.getElementById("tracking-timer").textContent = "3 dk";
         }
         
-        // Mid-way funny courier chat message
+        // Mid-way funny courier chat message (at 35%)
         if (movementTimer === 35) {
-          addChatBubble("rider", "Abi yollar biraz kalabalık ama patikalardan kestirme yapıyorum. Kırmızı ışıkları hafiften es geçtim ceza yemezsek sıcak sıcak sendeyim. 😉");
+          addChatBubble("rider", randOnWay);
         }
         
-        // Near-arrival funny courier chat message
+        // Near-arrival funny courier chat message (at 70%)
         if (movementTimer === 70) {
-          addChatBubble("rider", "Abi binanın önüne geldim. Yalnız yemeğin kokusu acayip sardı motoru... Dayanamayıp bir tane yesem bana kızar mısın? Hahaha şaka şaka kapıya çıkıyorum. 🛵");
+          addChatBubble("rider", randNear);
         }
       }
     }, 100);
     
-  }, 6000);
+  }, 7500);
 }
 
 // When Rider Arrives
@@ -792,8 +837,11 @@ function arriveRider() {
   
   addChatBubble("system", "Kurye Ahmet kapıda zili çalıyor!");
   
+  // Select random climax message
+  const randClimax = MESSAGES_POOL.climax[Math.floor(Math.random() * MESSAGES_POOL.climax.length)];
+  
   setTimeout(() => {
-    addChatBubble("rider", "Ve kapıyı çalıyorum... ŞAKA YAPTIM! Kardeşim, bu bir dopamin sitesi. Tabii ki yemek falan gelmiyor! Ama tebrikler; can çekmesini, para harcamayı ve o gereksiz kaloriyi yenmiş oldun! Cüzdanındaki nakit yerinde duruyor. 🌟");
+    addChatBubble("rider", randClimax);
   }, 2000);
 
   setTimeout(() => {
@@ -1144,6 +1192,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-go-to-checkout").addEventListener("click", loadCheckoutScreen);
   document.getElementById("btn-place-order").addEventListener("click", () => {
     // Stop timers just in case
+    clearTimeout(chatTimeout0);
     clearTimeout(chatTimeout1);
     clearTimeout(chatTimeout2);
     clearInterval(trackingInterval);
